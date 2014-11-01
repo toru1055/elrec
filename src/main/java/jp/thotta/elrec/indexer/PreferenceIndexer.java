@@ -3,11 +3,11 @@ package jp.thotta.elrec.indexer;
 import jp.thotta.elrec.common.ItemUsersPreferencesList;
 import jp.thotta.elrec.common.UserItemsPreferencesList;
 
-public class PreferencesController {
+public class PreferenceIndexer {
   private ItemUsersPreferencesList itemUsers;
   private UserItemsPreferencesList userItems;
 
-  public PreferencesController() {
+  public PreferenceIndexer() {
     itemUsers = new ItemUsersPreferencesList();
     userItems = new UserItemsPreferencesList();
   }
@@ -21,5 +21,4 @@ public class PreferencesController {
     itemUsers.del(itemId, userId);
     userItems.del(userId, itemId);
   }
-
 }

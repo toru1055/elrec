@@ -7,7 +7,7 @@ import junit.framework.TestSuite;
 import java.util.HashMap;
 import redis.clients.jedis.Jedis;
 
-public class PreferencesControllerTest extends TestCase {
+public class PreferenceIndexerTest extends TestCase {
   protected void setUp() {
     Jedis jedis = new Jedis("localhost");
     jedis.flushDB();
@@ -22,7 +22,7 @@ public class PreferencesControllerTest extends TestCase {
 
   public void testAddAndDelete() {
     Jedis jedis = new Jedis("localhost");
-    PreferencesController p = new PreferencesController();
+    PreferenceIndexer p = new PreferenceIndexer();
     p.addPreference(1,2);
     p.addPreference(1,3);
     p.addPreference(1,1);
