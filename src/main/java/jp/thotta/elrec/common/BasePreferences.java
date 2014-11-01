@@ -23,6 +23,10 @@ public class BasePreferences {
     this.preferenceIds.put(prefer_id, true);
   }
 
+  public void delPreference(long prefer_id) {
+    this.preferenceIds.remove(prefer_id);
+  }
+
   public long getId() {
     return this.id;
   }

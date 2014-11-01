@@ -13,6 +13,13 @@ public abstract class BasePreferencesList {
     this.jedis.set(this.getKeyName(sourceId), p.getPreferenceIdsCsv());
   }
 
+  public void del(long sourceId, long targetId) {
+    String csv = this.jedis.get(this.getKeyName(sourceId));
+    BasePreferences p = new BasePreferences(sourceId, csv);
+    p.delPreference(targetId);
+    this.jedis.set(this.getKeyName(sourceId), p.getPreferenceIdsCsv());
+  }
+
   public HashMap<Long,Boolean> getPreferenceIds(long sourceId) {
     String csv = this.jedis.get(this.getKeyName(sourceId));
     BasePreferences p = new BasePreferences(sourceId, csv);
