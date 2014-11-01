@@ -7,6 +7,18 @@ import junit.framework.TestSuite;
 import redis.clients.jedis.Jedis;
 
 public class JedisFactoryTest extends TestCase {
+  protected void setUp() {
+    Jedis jedis = new Jedis("localhost");
+    jedis.flushDB();
+    jedis.quit();
+  }
+
+  protected void tearDown() {
+    Jedis jedis = new Jedis("localhost");
+    jedis.flushDB();
+    jedis.quit();
+  }
+
   public void testGetInstance() {
     System.out.println("Testing: JedisFactory");
     Jedis jedis = JedisFactory.getInstance();
