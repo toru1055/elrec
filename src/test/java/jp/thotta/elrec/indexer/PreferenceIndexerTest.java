@@ -8,6 +8,7 @@ import java.util.HashMap;
 import redis.clients.jedis.Jedis;
 
 public class PreferenceIndexerTest extends TestCase {
+
   protected void setUp() {
     Jedis jedis = new Jedis("localhost");
     jedis.flushDB();
