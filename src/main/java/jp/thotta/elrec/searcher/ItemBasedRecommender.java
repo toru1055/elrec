@@ -32,25 +32,37 @@ public class ItemBasedRecommender {
   public List<RecommendedItem> mostSimilarItems(ArrayList<Long> itemIdList,
                                                 int howMany,
                                                 boolean includeKnownItems) {
-    HashMap<Long,Double> itemScores = new HashMap<Long,Double>();
+    HashMap<Long,Double> userScores = calcUserScores(itemIdList);
+    HashMap<Long,Double> itemScores = calcItemScores(userScores);
+    return getTopItems(itemScores, itemIdList, howMany, includeKnownItems);
+  }
+
+  private HashMap<Long,Double> calcUserScores(ArrayList<Long> itemIdList) {
     HashMap<Long,Double> userScores = new HashMap<Long,Double>();
     for(Long itemId : itemIdList) {
       HashMap<Long,Boolean> userIds = itemUsers.getPreferenceIds(itemId);
       for(Long userId : userIds.keySet()) {
         Double uScore = userScores.get(userId);
+        double additionalScore = 1.0 / Math.sqrt(userIds.size());
+        //double additionalScore = 1.0;
         if(uScore != null) {
-          userScores.put(userId, uScore.doubleValue() + 1.0);
+          userScores.put(userId, uScore.doubleValue() + additionalScore);
         } else {
-          userScores.put(userId, 1.0);
+          userScores.put(userId, additionalScore);
         }
       }
     }
+    return userScores;
+  }
+
+  private HashMap<Long,Double> calcItemScores(HashMap<Long,Double> userScores) {
+    HashMap<Long,Double> itemScores = new HashMap<Long,Double>();
     for(Long userId : userScores.keySet()) {
       HashMap<Long,Boolean> itemIds = userItems.getPreferenceIds(userId);
       for(Long itemId : itemIds.keySet()) {
         Double iScore = itemScores.get(itemId);
-        //double additionalScore = userScores.get(userId) / Math.sqrt(itemIds.size());
-        double additionalScore = userScores.get(userId) / itemIds.size();
+        double additionalScore = userScores.get(userId) / Math.sqrt(itemIds.size());
+        //double additionalScore = userScores.get(userId) / itemIds.size();
         if(iScore != null) {
           itemScores.put(itemId, iScore.doubleValue() + additionalScore);
         } else {
@@ -58,10 +70,10 @@ public class ItemBasedRecommender {
         }
       }
     }
-    return getTopItems(itemScores, itemIdList, howMany, includeKnownItems);
+    return itemScores;
   }
 
-  public static List<RecommendedItem> getTopItems(
+  private static List<RecommendedItem> getTopItems(
       HashMap<Long,Double> itemScores,
       ArrayList<Long> sourceItemIds,
       int howMany,
