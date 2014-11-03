@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
+import java.lang.Math;
 
 import redis.clients.jedis.Jedis;
 
@@ -46,11 +47,11 @@ public class ItemBasedRecommenderTest extends TestCase {
           ", score: " +
           rItem.getScore());
     }
-    assertEquals(itemMap.get((long)3), 2.0/7, 0.00001);
-    assertEquals(itemMap.get((long)5), 2.0/7, 0.00001);
-    assertEquals(itemMap.get((long)9), 2.0/7, 0.00001);
-    assertEquals(itemMap.get((long)401), 1.0/3, 0.00001);
-    assertEquals(itemMap.get((long)402), 1.0/3, 0.00001);
+    assertEquals(itemMap.get((long)3), 2.0/Math.sqrt(7), 0.00001);
+    assertEquals(itemMap.get((long)5), 2.0/Math.sqrt(7), 0.00001);
+    assertEquals(itemMap.get((long)9), 2.0/Math.sqrt(7), 0.00001);
+    assertEquals(itemMap.get((long)401), 1.0/Math.sqrt(3), 0.00001);
+    assertEquals(itemMap.get((long)402), 1.0/Math.sqrt(3), 0.00001);
   }
 
   protected void tearDown() {
