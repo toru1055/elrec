@@ -86,10 +86,9 @@ public class ItemBasedRecommender {
     List<RecommendedItem> topItems = new ArrayList<RecommendedItem>();
     List<RecommendedItem> orgItems = new ArrayList<RecommendedItem>();
     for(Long itemId : itemScores.keySet()) {
-      if(!includeKnownItems && sourceItemIds.indexOf(itemId) != -1) {
-        continue;
+      if(includeKnownItems || sourceItemIds.indexOf(itemId) == -1) {
+        orgItems.add(new RecommendedItem(itemId, itemScores.get(itemId)));
       }
-      orgItems.add(new RecommendedItem(itemId, itemScores.get(itemId)));
     }
     sortRecommendedItemDesc(orgItems);
     for(RecommendedItem rItem : orgItems) {
