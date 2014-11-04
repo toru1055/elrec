@@ -4,7 +4,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import java.util.HashMap;
 import redis.clients.jedis.Jedis;
 
 public class PreferenceIndexerTest extends TestCase {

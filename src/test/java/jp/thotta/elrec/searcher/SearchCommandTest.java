@@ -6,6 +6,7 @@ import junit.framework.TestSuite;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class SearchCommandTest extends TestCase {
     jsonCommand = "{'inputType' : 'item_id_list', 'itemIdList' : [1,4,6,400], 'howMany' : 10, 'includeKnownItems' : false}";
     SearchCommand sc = gson.fromJson(jsonCommand, SearchCommand.class);
     rItems = sc.execCommand(r);
-    HashMap<Long,Double> itemMap = new HashMap<Long,Double>();
+    Map<Long,Double> itemMap = new HashMap<Long,Double>();
     for(RecommendedItem rItem : rItems) {
       itemMap.put(rItem.getItemId(), rItem.getScore());
     }
