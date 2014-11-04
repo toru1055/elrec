@@ -4,6 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -30,6 +31,31 @@ public class ItemBasedRecommenderTest extends TestCase {
     }
   }
 
+  public void testRecommend() {
+    long userId = 13;
+    ItemBasedRecommender r = new ItemBasedRecommender();
+    List<RecommendedItem> rItemList = r.recommend(userId, 10, false);
+    Map<Long,Double> itemMap = new HashMap<Long,Double>();
+    for(RecommendedItem rItem : rItemList) {
+      itemMap.put(rItem.getItemId(), rItem.getScore());
+    }
+    assertNotNull(itemMap.get((long)67));
+    assertNull(itemMap.get((long)100));
+  }
+
+  public void testMostSimilarItemsFromSingleItem() {
+    long itemId = 400;
+    ItemBasedRecommender r = new ItemBasedRecommender();
+    List<RecommendedItem> rItemList = r.mostSimilarItems(itemId, 10, false);
+    HashMap<Long,Double> itemMap = new HashMap<Long,Double>();
+    for(RecommendedItem rItem : rItemList) {
+      itemMap.put(rItem.getItemId(), rItem.getScore());
+    }
+    assertEquals(itemMap.get((long)401), 1.0/Math.sqrt(3), 0.00001);
+    assertEquals(itemMap.get((long)402), 1.0/Math.sqrt(3), 0.00001);
+    assertNull(itemMap.get((long)403));
+  }
+
   public void testMostSimilarItems() {
     List<Long> sourceItems = new ArrayList<Long>();
     sourceItems.add((long)1);
@@ -41,11 +67,6 @@ public class ItemBasedRecommenderTest extends TestCase {
     HashMap<Long,Double> itemMap = new HashMap<Long,Double>();
     for(RecommendedItem rItem : rItemList) {
       itemMap.put(rItem.getItemId(), rItem.getScore());
-      System.out.println(
-          "Recommended item: " + 
-          rItem.getItemId() +
-          ", score: " +
-          rItem.getScore());
     }
     assertEquals(itemMap.get((long)3), 2.0/Math.sqrt(7), 0.00001);
     assertEquals(itemMap.get((long)5), 2.0/Math.sqrt(7), 0.00001);

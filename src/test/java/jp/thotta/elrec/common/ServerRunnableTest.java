@@ -61,6 +61,10 @@ public class ServerRunnableTest extends TestCase {
     out.println(jsonCommand);
     line = in.readLine();
     assertTrue(line.indexOf("{\"itemId\":299,\"score\":0.5}") > -1);
+    jsonCommand = "{'inputType' : 'user_id', 'userId' : 13, 'howMany' : 10, 'includeKnownItems' : false}";
+    out.println(jsonCommand);
+    line = in.readLine();
+    assertTrue(line.indexOf("{\"itemId\":67,\"score\":7.941062506660184}") > -1);
     out.println("");
   }
 

@@ -35,6 +35,7 @@ public class SearchCommandManagerTest extends TestCase {
     SearchCommandManager scm = new SearchCommandManager();
     String jsonCommand = "{'inputType' : 'item_id_list', 'itemIdList' : [1,4,6,400], 'howMany' : 10, 'includeKnownItems' : false}";
     String result = scm.execute(jsonCommand);
-    System.out.println("Result json: " + result);
+    assertTrue(result.indexOf("{\"itemId\":3,\"score\":0.7559289460184544}") > -1);
+    assertTrue(result.indexOf("{\"itemId\":405") == -1);
   }
 }

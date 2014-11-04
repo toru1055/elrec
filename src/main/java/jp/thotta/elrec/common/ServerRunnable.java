@@ -31,8 +31,8 @@ public class ServerRunnable implements Runnable {
         }
         showMessage("Command line: " + line);
         String jsonResult = fCommandManager.execute(line);
-        showMessage("Result json: " + jsonResult);
         out.println(jsonResult);
+        showMessage("Sent json result.");
       }
     } catch(IOException e) {
       e.printStackTrace();

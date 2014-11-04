@@ -22,12 +22,16 @@ public class ItemBasedRecommender {
 
   public List<RecommendedItem> recommend(long userId, int howMany,
                                          boolean includeKnownItems) {
-    return new ArrayList<RecommendedItem>();
+    Map<Long,Boolean> itemIds = userItems.getPreferenceIds(userId);
+    List<Long> itemIdList = new ArrayList<Long>(itemIds.keySet());
+    return mostSimilarItems(itemIdList, howMany, includeKnownItems);
   }
 
   public List<RecommendedItem> mostSimilarItems(long itemId, int howMany,
                                                 boolean includeKnownItems) {
-    return new ArrayList<RecommendedItem>();
+    List<Long> itemIdList = new ArrayList<Long>();
+    itemIdList.add(itemId);
+    return mostSimilarItems(itemIdList, howMany, includeKnownItems);
   }
 
   public List<RecommendedItem> mostSimilarItems(List<Long> itemIdList,
