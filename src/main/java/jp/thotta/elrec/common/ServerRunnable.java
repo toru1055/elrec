@@ -25,10 +25,7 @@ public class ServerRunnable implements Runnable {
       BufferedReader in = new BufferedReader(isr);
       PrintWriter out = new PrintWriter(fSocket.getOutputStream(), true);
       String line;
-      while((line = in.readLine()) != null) {
-        if(line.length() == 0) {
-          break;
-        }
+      while((line = in.readLine()) != null && line.length() > 0) {
         showMessage("Command line: " + line);
         String jsonResult = fCommandManager.execute(line);
         out.println(jsonResult);
