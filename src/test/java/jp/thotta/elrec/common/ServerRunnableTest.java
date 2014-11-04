@@ -16,13 +16,14 @@ import java.io.IOException;
 import java.io.File;
 
 import redis.clients.jedis.Jedis;
-import jp.thotta.elrec.indexer.CsvFileIndexerBatch;
 
+import jp.thotta.elrec.indexer.CsvFileIndexerBatch;
+import jp.thotta.elrec.indexer.IndexCommandManager;
 import jp.thotta.elrec.searcher.SearchCommandManager;
 
 public class ServerRunnableTest extends TestCase {
-  private Thread serverSetThread;
   private static final int SERVER_PORT = 1055;
+
   protected void setUp() throws IOException {
     Jedis jedis = new Jedis("localhost");
     jedis.flushDB();
@@ -34,19 +35,19 @@ public class ServerRunnableTest extends TestCase {
     } catch(IOException e) {
       System.out.println(e.getMessage());
     }
-    ServerSetRunnable serverSetRunnable = new ServerSetRunnable(SERVER_PORT);
-    serverSetThread = new Thread(serverSetRunnable);
-    serverSetThread.start();
   }
 
   protected void tearDown() throws InterruptedException {
-    serverSetThread.join();
     Jedis jedis = new Jedis("localhost");
     jedis.flushDB();
     jedis.quit();
   }
 
-  public void testSingleServerThread() throws IOException, UnknownHostException {
+  public void testSearchServerThread() throws IOException, UnknownHostException, InterruptedException {
+    CommandManager cManager = new SearchCommandManager();
+    ServerSetRunnable serverSetRunnable = new ServerSetRunnable(SERVER_PORT, cManager);
+    Thread serverSetThread = new Thread(serverSetRunnable);
+    serverSetThread.start();
     Socket cSock = new Socket("localhost", SERVER_PORT);
     BufferedReader in = new BufferedReader(new InputStreamReader(cSock.getInputStream()));
     PrintWriter out = new PrintWriter(cSock.getOutputStream(), true);
@@ -66,18 +67,47 @@ public class ServerRunnableTest extends TestCase {
     line = in.readLine();
     assertTrue(line.indexOf("{\"itemId\":67,\"score\":7.941062506660184}") > -1);
     out.println("");
+    serverSetThread.join();
+  }
+
+  public void testIndexServerThread() throws IOException, UnknownHostException, InterruptedException {
+    CommandManager cManager = new IndexCommandManager();
+    ServerSetRunnable serverSetRunnable = new ServerSetRunnable(SERVER_PORT, cManager);
+    Thread indexServerSetThread = new Thread(serverSetRunnable);
+    indexServerSetThread.start();
+    Socket cSock = new Socket("localhost", SERVER_PORT);
+    BufferedReader in = new BufferedReader(new InputStreamReader(cSock.getInputStream()));
+    PrintWriter out = new PrintWriter(cSock.getOutputStream(), true);
+    out.println("Hello world.");
+    String line = in.readLine();
+    assertEquals(line, "null");
+    String jsonCommand = "{'userId' : 1000000, 'itemId' : 2000000}";
+    out.println(jsonCommand);
+    line = in.readLine();
+    assertEquals(line, "OK");
+    out.println("{'userId' : 1000000, 'itemId' : 3000000}");
+    out.println("{'userId' : 1000000, 'itemId' : 1000000}");
+    out.println("{'userId' : 1000000, 'itemId' : 2000000}");
+    out.println("");
+    indexServerSetThread.join();
+    Jedis jedis = new Jedis("localhost");
+    assertTrue(jedis.get("user:1000000").indexOf("2000000") > -1);
+    assertTrue(jedis.get("user:1000000").indexOf("3000000") > -1);
+    assertTrue(jedis.get("user:1000000").indexOf("5000000") == -1);
+    jedis.quit();
   }
 
   class ServerSetRunnable implements Runnable {
     private ServerSocket fServerSocket;
+    private CommandManager cManager;
 
-    public ServerSetRunnable(int port) throws IOException {
+    public ServerSetRunnable(int port, CommandManager cm) throws IOException {
       this.fServerSocket = new ServerSocket(port);
+      this.cManager = cm;
     }
 
     public void run() {
       try {
-        CommandManager cManager = new SearchCommandManager();
         Socket sSock = fServerSocket.accept();
         ServerRunnable serverRunnable = new ServerRunnable(sSock, 0, cManager);
         Thread serverThread = new Thread(serverRunnable);
