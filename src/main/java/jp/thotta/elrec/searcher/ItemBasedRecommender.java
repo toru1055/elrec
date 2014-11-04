@@ -4,6 +4,7 @@ import jp.thotta.elrec.common.ItemUsersPreferencesList;
 import jp.thotta.elrec.common.UserItemsPreferencesList;
 
 import java.lang.Math;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -29,18 +30,18 @@ public class ItemBasedRecommender {
     return new ArrayList<RecommendedItem>();
   }
 
-  public List<RecommendedItem> mostSimilarItems(ArrayList<Long> itemIdList,
+  public List<RecommendedItem> mostSimilarItems(List<Long> itemIdList,
                                                 int howMany,
                                                 boolean includeKnownItems) {
-    HashMap<Long,Double> userScores = calcUserScores(itemIdList);
-    HashMap<Long,Double> itemScores = calcItemScores(userScores);
+    Map<Long,Double> userScores = calcUserScores(itemIdList);
+    Map<Long,Double> itemScores = calcItemScores(userScores);
     return getTopItems(itemScores, itemIdList, howMany, includeKnownItems);
   }
 
-  private HashMap<Long,Double> calcUserScores(ArrayList<Long> itemIdList) {
-    HashMap<Long,Double> userScores = new HashMap<Long,Double>();
+  private Map<Long,Double> calcUserScores(List<Long> itemIdList) {
+    Map<Long,Double> userScores = new HashMap<Long,Double>();
     for(Long itemId : itemIdList) {
-      HashMap<Long,Boolean> userIds = itemUsers.getPreferenceIds(itemId);
+      Map<Long,Boolean> userIds = itemUsers.getPreferenceIds(itemId);
       for(Long userId : userIds.keySet()) {
         Double uScore = userScores.get(userId);
         double additionalScore = 1.0 / Math.sqrt(userIds.size());
@@ -55,10 +56,10 @@ public class ItemBasedRecommender {
     return userScores;
   }
 
-  private HashMap<Long,Double> calcItemScores(HashMap<Long,Double> userScores) {
-    HashMap<Long,Double> itemScores = new HashMap<Long,Double>();
+  private Map<Long,Double> calcItemScores(Map<Long,Double> userScores) {
+    Map<Long,Double> itemScores = new HashMap<Long,Double>();
     for(Long userId : userScores.keySet()) {
-      HashMap<Long,Boolean> itemIds = userItems.getPreferenceIds(userId);
+      Map<Long,Boolean> itemIds = userItems.getPreferenceIds(userId);
       for(Long itemId : itemIds.keySet()) {
         Double iScore = itemScores.get(itemId);
         double additionalScore = userScores.get(userId) / Math.sqrt(itemIds.size());
@@ -74,12 +75,12 @@ public class ItemBasedRecommender {
   }
 
   private static List<RecommendedItem> getTopItems(
-      HashMap<Long,Double> itemScores,
-      ArrayList<Long> sourceItemIds,
+      Map<Long,Double> itemScores,
+      List<Long> sourceItemIds,
       int howMany,
       boolean includeKnownItems) {
-    ArrayList<RecommendedItem> topItems = new ArrayList<RecommendedItem>();
-    ArrayList<RecommendedItem> orgItems = new ArrayList<RecommendedItem>();
+    List<RecommendedItem> topItems = new ArrayList<RecommendedItem>();
+    List<RecommendedItem> orgItems = new ArrayList<RecommendedItem>();
     for(Long itemId : itemScores.keySet()) {
       if(!includeKnownItems && sourceItemIds.indexOf(itemId) != -1) {
         continue;
@@ -97,7 +98,7 @@ public class ItemBasedRecommender {
   }
 
   private static void sortRecommendedItemDesc(
-      ArrayList<RecommendedItem> rItemList) {
+      List<RecommendedItem> rItemList) {
     Collections.sort(rItemList, new Comparator<RecommendedItem>() {
       @Override
       public int compare(RecommendedItem r1, RecommendedItem r2) {

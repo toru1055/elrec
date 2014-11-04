@@ -31,7 +31,7 @@ public class ItemBasedRecommenderTest extends TestCase {
   }
 
   public void testMostSimilarItems() {
-    ArrayList<Long> sourceItems = new ArrayList<Long>();
+    List<Long> sourceItems = new ArrayList<Long>();
     sourceItems.add((long)1);
     sourceItems.add((long)4);
     sourceItems.add((long)6);

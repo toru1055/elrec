@@ -11,7 +11,7 @@ public class SearchCommand {
   private Long itemId;
   private Integer howMany;
   private Boolean includeKnownItems;
-  private ArrayList<Long> itemIdList;
+  private List<Long> itemIdList;
 
   private boolean isCorrectFormat() {
     boolean isCorrect = false;
