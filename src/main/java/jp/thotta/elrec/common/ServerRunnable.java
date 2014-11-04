@@ -10,10 +10,12 @@ import java.io.IOException;
 public class ServerRunnable implements Runnable {
   private Socket fSocket;
   private int fNumber;
+  private CommandManager fCommandManager;
 
-  public ServerRunnable(Socket socket, int number) {
+  public ServerRunnable(Socket socket, int number, CommandManager cManager) {
     this.fSocket = socket;
     this.fNumber = number;
+    this.fCommandManager = cManager;
   }
 
   public void run() {
@@ -28,6 +30,9 @@ public class ServerRunnable implements Runnable {
           break;
         }
         showMessage("Command line: " + line);
+        String jsonResult = fCommandManager.execute(line);
+        showMessage("Result json: " + jsonResult);
+        out.println(jsonResult);
       }
     } catch(IOException e) {
       e.printStackTrace();
