@@ -4,6 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.util.Map;
 import java.util.HashMap;
 
 public class BasePreferencesTest extends TestCase {
@@ -21,7 +22,7 @@ public class BasePreferencesTest extends TestCase {
     assertTrue(res.indexOf("9") != -1);
     assertTrue(res.indexOf("5") != -1);
     assertTrue(res.indexOf("7") == -1);
-    HashMap<Long,Boolean> list = p.getPreferenceIds();
+    Map<Long,Boolean> list = p.getPreferenceIds();
     assertTrue(list.get((long)10));
     assertTrue(list.get((long)1));
     assertTrue(list.get((long)3));

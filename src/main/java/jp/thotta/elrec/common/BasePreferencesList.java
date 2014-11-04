@@ -1,5 +1,6 @@
 package jp.thotta.elrec.common;
 
+import java.util.Map;
 import java.util.HashMap;
 import redis.clients.jedis.Jedis;
 
@@ -20,7 +21,7 @@ public abstract class BasePreferencesList {
     this.jedis.set(this.getKeyName(sourceId), p.getPreferenceIdsCsv());
   }
 
-  public HashMap<Long,Boolean> getPreferenceIds(long sourceId) {
+  public Map<Long,Boolean> getPreferenceIds(long sourceId) {
     String csv = this.jedis.get(this.getKeyName(sourceId));
     BasePreferences p = new BasePreferences(sourceId, csv);
     return p.getPreferenceIds();

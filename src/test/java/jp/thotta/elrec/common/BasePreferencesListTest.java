@@ -4,6 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.util.Map;
 import java.util.HashMap;
 import redis.clients.jedis.Jedis;
 
@@ -27,7 +28,7 @@ public class BasePreferencesListTest extends TestCase {
     itemUsers.add(111, 4);
     itemUsers.add(111, 1);
     itemUsers.add(111, 6);
-    HashMap<Long,Boolean> m = itemUsers.getPreferenceIds(111);
+    Map<Long,Boolean> m = itemUsers.getPreferenceIds(111);
     assertTrue(m.get((long)1));
     assertTrue(m.get((long)2));
     assertTrue(m.get((long)4));
@@ -42,7 +43,7 @@ public class BasePreferencesListTest extends TestCase {
     userItems.add(111, 4);
     userItems.add(111, 1);
     userItems.add(111, 6);
-    HashMap<Long,Boolean> m = userItems.getPreferenceIds(111);
+    Map<Long,Boolean> m = userItems.getPreferenceIds(111);
     assertTrue(m.get((long)1));
     assertTrue(m.get((long)2));
     assertTrue(m.get((long)4));

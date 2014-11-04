@@ -1,12 +1,13 @@
 package jp.thotta.elrec.common;
 
+import java.util.Map;
 import java.util.HashMap;
 
 public class BasePreferences {
   private long id;
-  private HashMap<Long,Boolean> preferenceIds;
+  private Map<Long,Boolean> preferenceIds;
 
-  public BasePreferences(long id, HashMap<Long,Boolean> preferenceIds) {
+  public BasePreferences(long id, Map<Long,Boolean> preferenceIds) {
     this.id = id;
     this.preferenceIds = preferenceIds;
   }
@@ -15,7 +16,7 @@ public class BasePreferences {
     this(id, csv2ids(preferenceIdsCsv));
   }
 
-  public HashMap<Long,Boolean> getPreferenceIds() {
+  public Map<Long,Boolean> getPreferenceIds() {
     return this.preferenceIds;
   }
 
@@ -41,8 +42,8 @@ public class BasePreferences {
     return PreferenceIdsCsv;
   }
 
-  private static HashMap<Long,Boolean> csv2ids(String ids_csv) {
-    HashMap<Long,Boolean> ids = new HashMap<Long,Boolean>();
+  private static Map<Long,Boolean> csv2ids(String ids_csv) {
+    Map<Long,Boolean> ids = new HashMap<Long,Boolean>();
     if(ids_csv != null) {
       String[] ids_str = ids_csv.split(",", 0);
       for(int i = 0; i < ids_str.length; i++) {
