@@ -3,7 +3,6 @@ package jp.thotta.elrec.searcher;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
-import gnu.getopt.Getopt;
 
 import jp.thotta.elrec.common.CommandManager;
 import jp.thotta.elrec.common.ServerRunnable;
