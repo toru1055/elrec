@@ -8,11 +8,16 @@ import jp.thotta.elrec.common.CommandManager;
 import jp.thotta.elrec.common.ServerRunnable;
 
 public class SearchServer {
+  // ここはデフォルト値にして、Configファイルか
+  // argsでポート番号指定できるようにしたい
   private static final int SEARCH_PORT = 1055;
 
   public static void main(String[] args) {
     int serverThreadMax = 0;
     if(args.length > 0) {
+      // argsでThread数を指定すべきかどうか
+      // でもこうしないとテストできない
+      // --testオプションでも作るかな
       serverThreadMax = Integer.parseInt(args[0]);
     }
     int threadCounter = 0;
