@@ -41,8 +41,9 @@ public class SearchServerTest extends TestCase {
   }
 
   public void testMainNoMainRunning() {
-    String[] a = new String[1];
-    a[0] = "0";
+    String[] a = new String[2];
+    a[0] = "-t";
+    a[1] = "0";
     SearchServer.main(a);
   }
 
@@ -68,8 +69,9 @@ public class SearchServerTest extends TestCase {
 
   class SearchServerRunnable implements Runnable {
     public void run() {
-      String[] a = new String[1];
-      a[0] = "1";
+      String[] a = new String[2];
+      a[0] = "-t";
+      a[1] = "1";
       SearchServer.main(a);
     }
   }
