@@ -3,6 +3,8 @@ package jp.thotta.elrec.searcher;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import jp.thotta.elrec.common.CommandManager;
 import jp.thotta.elrec.common.ServerRunnable;
@@ -10,7 +12,7 @@ import jp.thotta.elrec.common.ServerRunnable;
 public class SearchServer {
   // ここはデフォルト値にして、Configファイルか
   // argsでポート番号指定できるようにしたい
-  private static final int SEARCH_PORT = 1055;
+  private static final int SERVER_PORT = 1055;
   private static boolean isTest = false;
   private static int numTestThreads = 0;
 
@@ -27,16 +29,16 @@ public class SearchServer {
     int threadCounter = 0;
     ServerSocket serverSocket = null;
     ServerRunnable serverRunnable = null;
-    System.out.println("SearchServer has started with port: " + SEARCH_PORT);
+    ExecutorService ex = Executors.newCachedThreadPool();
+    System.out.println("SearchServer has started with port: " + SERVER_PORT);
     parseOptions(args);
     try {
-      serverSocket = new ServerSocket(SEARCH_PORT);
+      serverSocket = new ServerSocket(SERVER_PORT);
       CommandManager cManager = new SearchCommandManager();
       while(threadCounter++ < numTestThreads || isTest == false) {
         Socket sSock = serverSocket.accept();
         serverRunnable = new ServerRunnable(sSock, threadCounter, cManager);
-        Thread serverThread = new Thread(serverRunnable);
-        serverThread.start();
+        ex.execute(serverRunnable);
       }
     } catch(IOException e) {
       e.printStackTrace();
