@@ -1,4 +1,4 @@
-package jp.thotta.elrec.searcher;
+package jp.thotta.elrec.indexer;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -6,23 +6,23 @@ import java.util.concurrent.Executors;
 import jp.thotta.elrec.common.CommandManager;
 import jp.thotta.elrec.common.AbstractServer;
 
-public class SearchServer extends AbstractServer {
-  public SearchServer(int port, String serverName) {
+public class IndexServer extends AbstractServer {
+  public IndexServer(int port, String serverName) {
     super(port, serverName);
   }
 
   @Override
   protected CommandManager createCommandManager() {
-    return new SearchCommandManager();
+    return new IndexCommandManager();
   }
 
   @Override
   protected ExecutorService createExecutorService() {
-    return Executors.newCachedThreadPool();
+    return Executors.newSingleThreadExecutor();
   }
 
   public static void main(String[] args) {
-    SearchServer ss = new SearchServer(SEARCH_PORT, "SearchServer");
-    ss.runServer(args);
+    IndexServer is = new IndexServer(INDEX_PORT, "IndexServer");
+    is.runServer(args);
   }
 }
