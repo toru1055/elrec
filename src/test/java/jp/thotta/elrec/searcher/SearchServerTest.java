@@ -51,6 +51,7 @@ public class SearchServerTest extends TestCase {
     SearchServerRunnable ssr = new SearchServerRunnable();
     Thread searchServerThread = new Thread(ssr);
     searchServerThread.start();
+    Thread.sleep(1000);
     Socket cSock = new Socket("localhost", SERVER_PORT);
     BufferedReader in = new BufferedReader(new InputStreamReader(cSock.getInputStream()));
     PrintWriter out = new PrintWriter(cSock.getOutputStream(), true);
@@ -62,8 +63,9 @@ public class SearchServerTest extends TestCase {
     jsonCommand = "{'inputType' : 'user_id', 'userId' : 13, 'howMany' : 10, 'includeKnownItems' : false}";
     out.println(jsonCommand);
     line = in.readLine();
-    assertTrue(line.indexOf("{\"itemId\":67,\"score\":7.941062506660184}") > -1);
+    assertTrue(line.indexOf("{\"itemId\":67,\"score\":") > -1);
     out.println("");
+    cSock.close();
     searchServerThread.join();
   }
 
