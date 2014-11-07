@@ -31,6 +31,7 @@ public class ServerRunnable implements Runnable {
         out.println(jsonResult);
         showMessage("Sent json result.");
       }
+      showMessage("Server thread " + fNumber + " was finished.");
     } catch(IOException e) {
       e.printStackTrace();
     } finally {
