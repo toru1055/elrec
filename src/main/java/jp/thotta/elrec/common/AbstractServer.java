@@ -19,8 +19,8 @@ public abstract class AbstractServer {
   private int fNumTestThreads = 0;
   private String fServerName;
 
-  public AbstractServer(int port, String serverName) {
-    this.fServerPort = port;
+  public AbstractServer(int defaultPort, String serverName) {
+    this.fServerPort = defaultPort;
     this.fServerName = serverName;
   }
 
@@ -29,6 +29,8 @@ public abstract class AbstractServer {
       if("-t".equals(args[i])) {
         fIsTest = true;
         fNumTestThreads = Integer.parseInt(args[++i]);
+      } else if("-p".equals(args[i])) {
+        fServerPort = Integer.parseInt(args[++i]);
       }
     }
   }

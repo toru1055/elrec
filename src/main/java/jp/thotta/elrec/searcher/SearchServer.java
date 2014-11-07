@@ -7,8 +7,8 @@ import jp.thotta.elrec.common.CommandManager;
 import jp.thotta.elrec.common.AbstractServer;
 
 public class SearchServer extends AbstractServer {
-  public SearchServer(int port, String serverName) {
-    super(port, serverName);
+  public SearchServer(int defaultPort, String serverName) {
+    super(defaultPort, serverName);
   }
 
   @Override
